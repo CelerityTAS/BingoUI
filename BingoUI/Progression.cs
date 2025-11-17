@@ -680,7 +680,7 @@ namespace Celeste.Mod.BingoUI {
             ILCursor cursor = new ILCursor(il);
 
             if (!cursor.TryGotoNext(MoveType.Before, instr => instr.MatchStfld<HeartGemDoor>("Requires"))) {
-                throw new Exception("Couldn't patch heart door");
+                throw new Exception ("Couldn't patch heart door");
             }
             cursor.EmitDelegate<Func<int, int>>(CheckRequiredHearts);
         }
@@ -695,13 +695,13 @@ namespace Celeste.Mod.BingoUI {
             if (lvl != null) {
                 area = lvl.Session.Area;
             } else if (loader != null) {
-                var session = (Session)typeof(LevelLoader).GetField("session", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(loader);
+                var session = (Session) typeof(LevelLoader).GetField("session", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(loader);
                 area = session.Area;
                 if (area == null) {
                     throw new Exception("Hey. What the fuck.");
                 }
             } else if (editor != null) {
-                area = (AreaKey)typeof(MapEditor).GetField("area", BindingFlags.Static | BindingFlags.NonPublic).GetValue(null);
+                area = (AreaKey) typeof(MapEditor).GetField("area", BindingFlags.Static | BindingFlags.NonPublic).GetValue(null);
             } else {
                 throw new Exception("How are you loading this heart gate?");
             }

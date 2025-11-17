@@ -15,7 +15,7 @@ namespace Celeste.Mod.BingoUI {
         public static BingoSettings Settings => (BingoSettings)Instance._Settings;
         public static BingoSaveData SaveData => (BingoSaveData)Instance._SaveData;
         public static Level CurrentLevel;
-        
+
         public override void Load() {
             OuiJournalBinoculars.Load();
             HideControls.Load();
