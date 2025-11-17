@@ -7,6 +7,7 @@
         RockyRoad,
         MintChip,
         Raspberry,
+        DoubleSkip,
         DampedOnline,
     }
 

@@ -320,6 +320,7 @@ namespace Celeste.Mod.BingoUI {
                 IsAssistSkipping = true;
                 unlock(icon, () => {
                     BingoModule.SaveData.SkipUsed = icon.Area;
+                    BingoModule.SaveData.SkippedAreas.Add(icon.Area);
                     BingoModule.SaveData.EnteredAreas.Add(icon.Area);
                     IsAssistSkipping = false;
                     onComplete();
@@ -604,6 +605,48 @@ namespace Celeste.Mod.BingoUI {
                     break;
                 case ProgressionType.CheatMode:
                     throw new InvalidOperationException("cheat mode should have been caught earlier");
+                case ProgressionType.DoubleSkip:
+                    result[0].Icon = ChapterIconStatus.Excited;
+                    result[9].Icon = ChapterIconStatus.Shown;
+                    if (levels.Contains(0)) {
+                        result[0].Icon = ChapterIconStatus.Shown;
+                        result[1].Icon = ChapterIconStatus.Excited;
+                    }
+                    if (levels.Contains(1) || skipped == 2) {
+                        result[1].Icon = ChapterIconStatus.Shown;
+                        result[2].Icon = ChapterIconStatus.Excited;
+                    }
+                    if (levels.Contains(2) || skipped == 3) {
+                        result[2].Icon = ChapterIconStatus.Shown;
+                        result[3].Icon = ChapterIconStatus.Excited;
+                    }
+                    if (levels.Contains(3) || skipped == 4) {
+                        result[3].Icon = ChapterIconStatus.Shown;
+                        result[4].Icon = ChapterIconStatus.Excited;
+                    }
+                    if (levels.Contains(4) || skipped == 5) {
+                        result[4].Icon = ChapterIconStatus.Shown;
+                        result[5].Icon = ChapterIconStatus.Excited;
+                        result[10].Icon = ChapterIconStatus.Shown;
+                    }
+                    if (levels.Contains(5) || skipped == 6) {
+                        result[5].Icon = ChapterIconStatus.Shown;
+                        result[6].Icon = ChapterIconStatus.Excited;
+                        result[7].Icon = ChapterIconStatus.Excited;
+                    }
+                    if (levels.Contains(7) || skipped == 8) {
+                        result[7].Icon = ChapterIconStatus.Shown;
+                        result[8].Icon = ChapterIconStatus.Excited;
+                    }
+                    if (BingoModule.SaveData.SkippedAreas.Count < 2) {
+                        for (var i = 0; i <= 10; i++) {
+                            if (result[i].Icon == ChapterIconStatus.Hidden) {
+                                result[i].Icon = ChapterIconStatus.Skippable;
+                                break;
+                            }
+                        }
+                    }
+                    break;
                 case ProgressionType.DampedOnline:
                     if (!BingoClientInterop.isBingoClientLoaded) {
                         throw new InvalidOperationException("You are using DampedOnline, which requires BingoClient");
@@ -613,10 +656,10 @@ namespace Celeste.Mod.BingoUI {
                         result[8].Icon = ChapterIconStatus.Excited;
                         break;
                     }
-                    
+
                     int ObjectivesCompleted = BingoClientInterop.Instance.GetObjectiveCount();
-                    List<int> newSkipUnlocks = new List<int>() {0,0, 3, 7, 11, 15, 19, 22, 22, 24};
-                    skipsavailible = newSkipUnlocks.Select(border => ObjectivesCompleted >= border).Sum((b) => b?1:0);
+                    List<int> newSkipUnlocks = new List<int>() { 0, 0, 3, 7, 11, 15, 19, 22, 22, 24 };
+                    skipsavailible = newSkipUnlocks.Select(border => ObjectivesCompleted >= border).Sum((b) => b ? 1 : 0);
 
                     for (var i = 0; i <= 10; i++) {
                         result[i].Icon = ChapterIconStatus.Skippable;
@@ -637,7 +680,7 @@ namespace Celeste.Mod.BingoUI {
             ILCursor cursor = new ILCursor(il);
 
             if (!cursor.TryGotoNext(MoveType.Before, instr => instr.MatchStfld<HeartGemDoor>("Requires"))) {
-                throw new Exception ("Couldn't patch heart door");
+                throw new Exception("Couldn't patch heart door");
             }
             cursor.EmitDelegate<Func<int, int>>(CheckRequiredHearts);
         }
@@ -652,13 +695,13 @@ namespace Celeste.Mod.BingoUI {
             if (lvl != null) {
                 area = lvl.Session.Area;
             } else if (loader != null) {
-                var session = (Session) typeof(LevelLoader).GetField("session", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(loader);
+                var session = (Session)typeof(LevelLoader).GetField("session", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(loader);
                 area = session.Area;
                 if (area == null) {
                     throw new Exception("Hey. What the fuck.");
                 }
             } else if (editor != null) {
-                area = (AreaKey) typeof(MapEditor).GetField("area", BindingFlags.Static | BindingFlags.NonPublic).GetValue(null);
+                area = (AreaKey)typeof(MapEditor).GetField("area", BindingFlags.Static | BindingFlags.NonPublic).GetValue(null);
             } else {
                 throw new Exception("How are you loading this heart gate?");
             }

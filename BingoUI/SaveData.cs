@@ -12,6 +12,7 @@ namespace Celeste.Mod.BingoUI {
         public List<Keys> KeysList = new List<Keys>();
         public List<int> ClearedAreas = new List<int>();
         public List<int> EnteredAreas = new List<int>(); //need to implement filling this
+        public List<int> SkippedAreas = new List<int>();
     }
 
     public class Binoculars {
