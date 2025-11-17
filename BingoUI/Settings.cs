@@ -7,6 +7,7 @@
         RockyRoad,
         MintChip,
         Raspberry,
+        DampedOnline,
     }
 
     public class BingoSettings : EverestModuleSettings {

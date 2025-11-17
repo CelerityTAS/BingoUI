@@ -405,6 +405,8 @@ namespace Celeste.Mod.BingoUI {
                 result[i].Icon = ChapterIconStatus.Shown;
             }
             var levels = BingoModule.SaveData.ClearedAreas;
+            var unlocked = BingoModule.SaveData.EnteredAreas;
+            int skipsavailible;
             var skipped = BingoModule.SaveData.SkipUsed;
             var canUseCore = levels.Contains(9);
             var areas = SaveData.Instance.Areas;
@@ -602,6 +604,26 @@ namespace Celeste.Mod.BingoUI {
                     break;
                 case ProgressionType.CheatMode:
                     throw new InvalidOperationException("cheat mode should have been caught earlier");
+                case ProgressionType.DampedOnline:
+                    if (!BingoClientInterop.isBingoClientLoaded) {
+                        throw new InvalidOperationException("You are using DampedOnline, which requires BingoClient");
+                    }
+
+                    if (!BingoClientInterop.Instance.isConnected()) {
+                        result[8].Icon = ChapterIconStatus.Excited;
+                        break;
+                    }
+                    
+                    int ObjectivesCompleted = BingoClientInterop.Instance.GetObjectiveCount();
+                    List<int> newSkipUnlocks = new List<int>() {0,0, 3, 7, 11, 15, 19, 22, 22, 24};
+                    skipsavailible = newSkipUnlocks.Select(border => ObjectivesCompleted >= border).Sum((b) => b?1:0);
+
+                    for (var i = 0; i <= 10; i++) {
+                        result[i].Icon = ChapterIconStatus.Skippable;
+                        if (unlocked.Count > skipsavailible) result[i].Icon = ChapterIconStatus.Hidden;
+                        if (unlocked.Contains(i)) result[i].Icon = ChapterIconStatus.Shown;
+                    }
+                    break;
                 case ProgressionType.None:
                     throw new InvalidOperationException("This function should not be called for vanilla progression");
                 default:

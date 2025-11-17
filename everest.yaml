@@ -4,3 +4,6 @@
   Dependencies:
     - Name: Everest
       Version: 1.2781.0
+  OptionalDependencies:
+    - Name: BingoClient
+      Version: 1.0.0
