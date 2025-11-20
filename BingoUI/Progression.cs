@@ -605,40 +605,41 @@ namespace Celeste.Mod.BingoUI {
                     break;
                 case ProgressionType.CheatMode:
                     throw new InvalidOperationException("cheat mode should have been caught earlier");
-                case ProgressionType.DoubleSkip:
+                case ProgressionType.CustomSkipCount:
+                    var skippedChapters = BingoModule.SaveData.SkippedAreas;
                     result[0].Icon = ChapterIconStatus.Excited;
                     result[9].Icon = ChapterIconStatus.Shown;
                     if (levels.Contains(0)) {
                         result[0].Icon = ChapterIconStatus.Shown;
                         result[1].Icon = ChapterIconStatus.Excited;
                     }
-                    if (levels.Contains(1) || skipped == 2) {
+                    if (levels.Contains(1) ||  skippedChapters.Contains(2)) {
                         result[1].Icon = ChapterIconStatus.Shown;
                         result[2].Icon = ChapterIconStatus.Excited;
                     }
-                    if (levels.Contains(2) || skipped == 3) {
+                    if (levels.Contains(2) || skippedChapters.Contains(3)) {
                         result[2].Icon = ChapterIconStatus.Shown;
                         result[3].Icon = ChapterIconStatus.Excited;
                     }
-                    if (levels.Contains(3) || skipped == 4) {
+                    if (levels.Contains(3) || skippedChapters.Contains(4)) {
                         result[3].Icon = ChapterIconStatus.Shown;
                         result[4].Icon = ChapterIconStatus.Excited;
                     }
-                    if (levels.Contains(4) || skipped == 5) {
+                    if (levels.Contains(4) || skippedChapters.Contains(5)) {
                         result[4].Icon = ChapterIconStatus.Shown;
                         result[5].Icon = ChapterIconStatus.Excited;
                         result[10].Icon = ChapterIconStatus.Shown;
                     }
-                    if (levels.Contains(5) || skipped == 6) {
+                    if (levels.Contains(5) || skippedChapters.Contains(6)) {
                         result[5].Icon = ChapterIconStatus.Shown;
                         result[6].Icon = ChapterIconStatus.Excited;
                         result[7].Icon = ChapterIconStatus.Excited;
                     }
-                    if (levels.Contains(7) || skipped == 8) {
+                    if (levels.Contains(7) || skippedChapters.Contains(8)) {
                         result[7].Icon = ChapterIconStatus.Shown;
                         result[8].Icon = ChapterIconStatus.Excited;
                     }
-                    if (BingoModule.SaveData.SkippedAreas.Count < 2) {
+                    if (BingoModule.SaveData.SkippedAreas.Count < BingoModule.Settings.SkipCount) {
                         for (var i = 0; i <= 10; i++) {
                             if (result[i].Icon == ChapterIconStatus.Hidden) {
                                 result[i].Icon = ChapterIconStatus.Skippable;

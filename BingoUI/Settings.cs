@@ -7,7 +7,7 @@
         RockyRoad,
         MintChip,
         Raspberry,
-        DoubleSkip,
+        CustomSkipCount,
         DampedOnline,
     }
 
@@ -31,6 +31,9 @@
         public bool HideVariantsExceptGrabless { get; set; }
 
         public bool HideControls { get; set; }
+
+        [SettingRange(0, 6)]
+        public int SkipCount { get; set; } = 2;
 
         [SettingRange(0, 23)]
         public int CoreAHearts { get; set; } = 4;
